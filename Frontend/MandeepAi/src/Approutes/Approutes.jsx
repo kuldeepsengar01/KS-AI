@@ -1,5 +1,6 @@
 import React from 'react';
-import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 import Register from '../component/Register';
 import Otp from '../component/Otp';
 import Login from '../component/Login';
@@ -12,19 +13,27 @@ const AppRoutes = () => {
 
         <Route
           path="/"
-          element={<Home/>}
+          element={<Navigate to="/login" replace />}
         />
 
         <Route
           path="/register"
-          element={<Register/>}
+          element={<Register />}
         />
 
-        <Route path="/verify-otp" element={<Otp />} />
+        <Route
+          path="/verify-otp"
+          element={<Otp />}
+        />
 
         <Route
           path="/login"
-          element={<Login/>}
+          element={<Login />}
+        />
+
+        <Route
+          path="/home"
+          element={<Home />}
         />
 
       </Routes>
