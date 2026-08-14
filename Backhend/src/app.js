@@ -8,49 +8,28 @@ const userRoutes = require('./routes/user.routes');
 const app = express();
 
 
-// ================= CORS =================
-
-const allowedOrigins = [
-    'http://localhost:5173',
-    'https://ks-ai-zeta.vercel.app'
-];
-
+// CORS
 app.use(cors({
-    origin: function (origin, callback) {
-
-        // Allow requests without origin
-        // (Postman, server-to-server, etc.)
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-
-    },
+    origin: [
+        'http://localhost:5173',
+        'https://ks-ai-zeta.vercel.app'
+    ],
     credentials: true
 }));
 
 
-// ================= MIDDLEWARE =================
-
+// Middleware
 app.use(express.json());
-
-app.use(express.urlencoded({
-    extended: true
-}));
-
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-
 app.use(cookieParser());
 
 
-// ================= ROUTES =================
-
+// Routes
 app.use('/user', userRoutes);
 
 
-// ================= TEST ROUTE =================
-
+// Test route
 app.get('/', (req, res) => {
     res.status(200).json({
         message: 'KS-AI Backend is running'
