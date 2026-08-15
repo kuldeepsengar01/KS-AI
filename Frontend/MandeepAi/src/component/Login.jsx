@@ -90,25 +90,28 @@ export default function Login() {
 
         try {
             setLoading(true);
-
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/user/login`,
-                {
-                    email: formData.email,
-                    password: formData.password
-                },
-                {
-                    withCredentials: true
-                }
-            );
+    `${import.meta.env.VITE_API_URL}/user/login`,
+    {
+        email: formData.email,
+        password: formData.password
+    },
+    {
+        withCredentials: true
+    }
+);
 
-            console.log('Login Response:', response.data);
+console.log('Login Response:', response.data);
 
-            setSuccess('Login Successfully');
+setSuccess('Login Successfully');
 
-            setTimeout(() => {
-                navigate('/');
-            }, 1000);
+// Login status
+localStorage.setItem('isLoggedIn', 'true');
+
+setTimeout(() => {
+    navigate('/');
+}, 1000);
+               
 
         } catch (error) {
             console.log('Login Error:', error);
