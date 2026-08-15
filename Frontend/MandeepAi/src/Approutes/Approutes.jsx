@@ -13,7 +13,7 @@ const AppRoutes = () => {
 
         <Route
           path="/"
-          element={<Navigate to="/login" replace />}
+          element={<Home />}
         />
 
         <Route
@@ -34,6 +34,12 @@ const AppRoutes = () => {
         <Route
           path="/home"
           element={<Home />}
+        />
+
+        {/* Unknown URL */}
+        <Route
+          path="*"
+          element={<Navigate to="/login" replace />}
         />
 
       </Routes>
