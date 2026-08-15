@@ -15,7 +15,9 @@ const app = express();
 const allowedOrigins = [
     process.env.FRONTEND_URL,
     process.env.FRONTEND_URL_PROD
-];
+].filter(Boolean);
+
+console.log('Allowed Origins:', allowedOrigins);
 
 app.use(
     cors({
@@ -26,10 +28,12 @@ app.use(
                 return callback(null, true);
             }
 
-            // Check allowed frontend
+            // Allow frontend
             if (allowedOrigins.includes(origin)) {
                 return callback(null, true);
             }
+
+            console.log('Blocked Origin:', origin);
 
             return callback(new Error('Not allowed by CORS'));
         },
@@ -73,7 +77,7 @@ app.get('/', (req, res) => {
 
 app.use((err, req, res, next) => {
 
-    console.error('Error:', err.message);
+    console.error('ERROR:', err.message);
 
     if (err.message === 'Not allowed by CORS') {
         return res.status(403).json({
