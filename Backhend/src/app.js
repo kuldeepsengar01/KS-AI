@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -11,21 +13,20 @@ const app = express();
 // ================= CORS =================
 
 const allowedOrigins = [
-    'http://localhost:5173',
-    'https://ks-ai-zeta.vercel.app',
-    'https://ks-ai-git-main-kuldeepsengar01s-projects.vercel.app'
+    process.env.FRONTEND_URL,
+    process.env.FRONTEND_URL_PROD
 ];
 
 app.use(
     cors({
         origin: function (origin, callback) {
 
-            // Allow requests without origin
-            // Example: Postman / server-to-server
+            // Allow Postman / server-to-server requests
             if (!origin) {
                 return callback(null, true);
             }
 
+            // Check allowed frontend
             if (allowedOrigins.includes(origin)) {
                 return callback(null, true);
             }
@@ -64,6 +65,26 @@ app.get('/', (req, res) => {
     res.status(200).json({
         success: true,
         message: 'KS-AI Backend is running'
+    });
+});
+
+
+// ================= ERROR HANDLER =================
+
+app.use((err, req, res, next) => {
+
+    console.error('Error:', err.message);
+
+    if (err.message === 'Not allowed by CORS') {
+        return res.status(403).json({
+            success: false,
+            message: 'CORS Error: Frontend not allowed'
+        });
+    }
+
+    return res.status(500).json({
+        success: false,
+        message: 'Internal Server Error'
     });
 });
 
