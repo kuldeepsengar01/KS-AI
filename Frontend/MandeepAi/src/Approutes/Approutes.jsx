@@ -11,24 +11,45 @@ import Otp from '../component/Otp';
 import Login from '../component/Login';
 import Home from '../component/Home';
 
+
+// ================= PROTECTED ROUTE =================
+
 const ProtectedRoute = ({ children }) => {
 
-  const token = localStorage.getItem('token');
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
 
-  if (!token) {
+  if (isLoggedIn !== 'true') {
     return <Navigate to="/login" replace />;
   }
 
   return children;
 };
 
+
+// ================= PUBLIC ROUTE =================
+
+const PublicRoute = ({ children }) => {
+
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+  if (isLoggedIn === 'true') {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+
+// ================= APP ROUTES =================
+
 const AppRoutes = () => {
 
   return (
     <Router>
+
       <Routes>
 
-        {/* Home */}
+        {/* HOME */}
         <Route
           path="/"
           element={
@@ -38,10 +59,14 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Register */}
+        {/* REGISTER */}
         <Route
           path="/register"
-          element={<Register />}
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
         />
 
         {/* OTP */}
@@ -50,13 +75,17 @@ const AppRoutes = () => {
           element={<Otp />}
         />
 
-        {/* Login */}
+        {/* LOGIN */}
         <Route
           path="/login"
-          element={<Login />}
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
         />
 
-        {/* Home */}
+        {/* HOME */}
         <Route
           path="/home"
           element={
@@ -66,13 +95,14 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Unknown URL */}
+        {/* UNKNOWN URL */}
         <Route
           path="*"
           element={<Navigate to="/login" replace />}
         />
 
       </Routes>
+
     </Router>
   );
 };
